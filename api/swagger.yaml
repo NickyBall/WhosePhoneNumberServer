@@ -10,7 +10,7 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "virtserver.swaggerhub.com"
-basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
+#basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
 tags:
 - name: "admins"
   description: "Secured Admin-only calls"
