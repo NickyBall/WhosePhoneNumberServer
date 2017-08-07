@@ -1,0 +1,73 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a simple API"
+  version: "1.0.0"
+  title: "Simple Inventory API"
+  contact:
+    email: "you@your-company.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
+tags:
+- name: "admins"
+  description: "Secured Admin-only calls"
+- name: "developers"
+  description: "Operations available to regular developers"
+schemes:
+- "https"
+paths:
+  /GetCommentsByPhoneNumber:
+    get:
+      tags:
+      - "Comments"
+      summary: "searches Comment"
+      description: "Retrieve all comment given phone number\n"
+      operationId: "searchInventory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhoneNumber"
+        in: "query"
+        description: "Phone Number for Comments"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CommentItem"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
+definitions:
+  CommentItem:
+    type: "object"
+    required:
+    - "comment"
+    - "date"
+    - "id"
+    - "ipaddress"
+    - "name"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      name:
+        type: "string"
+        example: "Widget Adapter"
+      comment:
+        type: "string"
+        example: "This is a debt collector"
+      date:
+        type: "string"
+        format: "int32"
+        example: "2016-08-29T09:12:33.001Z"
+      ipaddress:
+        type: "string"
+        example: "192.168.1.1"
