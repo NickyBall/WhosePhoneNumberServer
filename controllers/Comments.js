@@ -6,6 +6,6 @@ var url = require('url');
 var Comments = require('./CommentsService');
 
 
-module.exports.searchInventory = function searchInventory (req, res, next) {
-  Comments.searchInventory(req.swagger.params, res, next);
+module.exports.searchComment = function searchComment (req, res, next) {
+  Comments.searchComment(req.swagger.params, res, next);
 };
