@@ -1,73 +1,230 @@
----
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "This is a simple API"
-  version: "1.0.0"
-  title: "Simple Inventory API"
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple WhosePhoneNumber API
+  # put the contact info for your development or API team
   contact:
-    email: "you@your-company.com"
+    email: you@your-company.com
+
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "virtserver.swaggerhub.com"
-#basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
 tags:
-- name: "admins"
-  description: "Secured Admin-only calls"
-- name: "developers"
-  description: "Operations available to regular developers"
-schemes:
-- "http"
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
 paths:
   /GetCommentsByPhoneNumber:
     get:
       tags:
-      - "Comments"
-      summary: "searches Comment"
-      description: "Retrieve all comment given phone number\n"
-      operationId: "searchInventory"
+      - Comments
+      summary: searches Comment
+      operationId: searchComment
+      description: |
+        Retrieve all comment given phone number
       produces:
-      - "application/json"
+      - application/json
       parameters:
-      - name: "PhoneNumber"
-        in: "query"
-        description: "Phone Number for Comments"
-        required: true
-        type: "string"
+      - in: query
+        name: PhoneNumber
+        description: Phone Number for Comments
+        required: false
+        type: string
       responses:
         200:
-          description: "search results matching criteria"
+          description: search results matching criteria
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/CommentItem"
+              $ref: '#/definitions/CommentItem'
         400:
-          description: "bad input parameter"
-      x-swagger-router-controller: "Comments"
+          description: bad input parameter
+  /GetReportedSafe:
+    get:
+      tags:
+      - Recently
+      summary: Get Recently Reported as Safe
+      operationId: getReportSafe
+      description: |
+        Retrieve all comment given phone number
+      produces:
+      - application/json
+      parameters: []
+
+      responses:
+        200:
+          description: Recently Report as Safe
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RecentlySafeItem'
+        400:
+          description: bad input parameter
+  /GetReportedUnSafe:
+    get:
+      tags:
+      - Recently
+      summary: Get Recently Reported as UnSafe
+      operationId: getReportUnSafe
+      description: |
+        Retrieve all comment given phone number
+      produces:
+      - application/json
+      parameters: []
+
+      responses:
+        200:
+          description: Recently Report as UnSafe
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RecentlySafeItem'
+        400:
+          description: bad input parameter
+  /GetRecentedCheckedPhoneNumber:
+    get:
+      tags:
+      - Recently
+      summary: Get Recently Checked PhoneNumber
+      operationId: getRecentlyCheckedPhoneNumber
+      description: |
+        Retrieve all comment given phone number
+      produces:
+      - application/json
+      parameters: []
+
+      responses:
+        200:
+          description: Recently Checked PhoneNumber
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RecentlyCheckedPhoneNumberItem'
+        400:
+          description: bad input parameter
+  /GetRecentedComments:
+    get:
+      tags:
+      - Recently
+      summary: Get Recently Checked PhoneNumber
+      operationId: getRecentlyComments
+      description: |
+        Retrieve all comment given phone number
+      produces:
+      - application/json
+      parameters: []
+
+      responses:
+        200:
+          description: Recently Checked PhoneNumber
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RecentlyCommentItem'
+        400:
+          description: bad input parameter
+
+
 definitions:
   CommentItem:
-    type: "object"
+    type: object
     required:
-    - "comment"
-    - "date"
-    - "id"
-    - "ipaddress"
-    - "name"
+    - id
+    - username
+    - comment
+    - date
+    - ipaddress
     properties:
       id:
-        type: "string"
-        format: "uuid"
-        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
-      name:
-        type: "string"
-        example: "Widget Adapter"
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      username:
+        type: string
+        example: Widget Adapter
       comment:
-        type: "string"
-        example: "This is a debt collector"
+        type: string
+        example: This is a debt collector
       date:
-        type: "string"
-        format: "int32"
-        example: "2016-08-29T09:12:33.001Z"
+        type: string
+        format: int32
+        example: 2016-08-29T09:12:33.001Z
       ipaddress:
-        type: "string"
-        example: "192.168.1.1"
+        type: string
+        example: 192.168.1.1
+  RecentlySafeItem:
+    type: object
+    required:
+    - id
+    - phonenumber
+    - ipaddress
+    - date
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      phonenumber:
+        type: string
+        example: 850-586-6200
+      ipaddress:
+        type: string
+        example: 192.168.1.1
+      date:
+        type: string
+        format: int32
+        example: 2016-08-29T09:12:33.001Z
+  RecentlyCheckedPhoneNumberItem:
+    type: object
+    required:
+    - id
+    - phonenumber
+    - address
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      phonenumber:
+        type: string
+        example: 404-275-4585
+      address:
+        type: string
+        example: Atlanta, Georgia, United States
+  RecentlyCommentItem:
+    type: object
+    required:
+    - id
+    - username
+    - phonenumber
+    - comment
+    - date
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      username:
+        type: string
+        example: Widget Adapter
+      phonenumber:
+        type: string
+        example: 404-275-4585
+      comment:
+        type: string
+        example: This is a debt collector
+      date:
+        type: string
+        format: int32
+        example: 2016-08-29T09:12:33.001Z
+
+# Added by API Auto Mocking Plugin
+#host: virtserver.swaggerhub.com
+#basePath: /NickyBall/WhosePhoneNumber/1.0.0
+schemes:
+ - http
