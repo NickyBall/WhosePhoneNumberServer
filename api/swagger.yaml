@@ -10,13 +10,14 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "virtserver.swaggerhub.com"
-#basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
-#basePath: ""
+basePath: "/NickyBall/WhosePhoneNumber/1.0.0"
 tags:
-- name: "admins"
-  description: "Secured Admin-only calls"
-- name: "developers"
-  description: "Operations available to regular developers"
+- name: "Comments"
+  description: "API about user comment"
+- name: "Recently"
+  description: "API for get recently list"
+- name: "Information"
+  description: "API provides the information about code and phone number"
 schemes:
 - "https"
 - "http"
@@ -43,6 +44,32 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CommentItem"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
+  /AddNewComment:
+    post:
+      tags:
+      - "Comments"
+      summary: "Add New Comment"
+      description: "Add a new user comment\n"
+      operationId: "addComment"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "CommentBody"
+        description: "Phone Number for Comments"
+        required: true
+        schema:
+          $ref: "#/definitions/CommentBody"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PostResult"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Comments"
@@ -126,6 +153,56 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Recently"
+  /GetAreaCodeDescription:
+    get:
+      tags:
+      - "Information"
+      summary: "Get Description for specific area code"
+      description: "Retrieve the Information of Area Code\n"
+      operationId: "getAreaCodeDescription"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "us_code"
+        in: "query"
+        description: "US Area Code"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Recently Checked PhoneNumber"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/USAreaCodeInformation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Information"
+  /GetPhoneInformation:
+    get:
+      tags:
+      - "Information"
+      summary: "Get Information of Specific Information"
+      description: "Retrieve the Information of Phonenumber\n"
+      operationId: "getPhoneDescription"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "phonenumber"
+        in: "query"
+        description: "Phone Number"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Recently Checked PhoneNumber"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PhoneInformation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Information"
 definitions:
   CommentItem:
     type: "object"
@@ -218,3 +295,111 @@ definitions:
         type: "string"
         format: "int32"
         example: "2016-08-29T09:12:33.001Z"
+  USAreaCodeInformation:
+    type: "object"
+    required:
+    - "city"
+    - "country"
+    - "current_time"
+    - "id"
+    - "state"
+    - "timezone"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      country:
+        type: "string"
+        example: "United State"
+      state:
+        type: "string"
+        example: "New Jersey"
+      city:
+        type: "string"
+        example: "Jersey City"
+      timezone:
+        type: "string"
+        example: "Eastern (UTC-05:00)"
+      current_time:
+        type: "string"
+        format: "int32"
+        example: "04:48 am"
+  PhoneInformation:
+    type: "object"
+    required:
+    - "areacode"
+    - "carrier"
+    - "city"
+    - "country"
+    - "county"
+    - "id"
+    - "interformat"
+    - "prefix"
+    - "state"
+    - "usage_type"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      interformat:
+        type: "string"
+        example: "+1 718 349 9300"
+      country:
+        type: "string"
+        example: "United State"
+      state:
+        type: "string"
+        example: "New Jersey"
+      city:
+        type: "string"
+        example: "Jersey City"
+      areacode:
+        type: "string"
+        example: "718"
+      prefix:
+        type: "string"
+        example: "349"
+      county:
+        type: "string"
+        example: "Queens"
+      carrier:
+        type: "string"
+        example: "VERIZON NEW YORK, INC."
+      usage_type:
+        type: "string"
+        example: "Landline"
+  CommentBody:
+    type: "object"
+    required:
+    - "CallerTypeId"
+    - "Comment"
+    - "Username"
+    properties:
+      Username:
+        type: "string"
+        example: "John Smith"
+      Comment:
+        type: "string"
+        example: "This is a comment."
+      CallerTypeId:
+        type: "string"
+        example: "000001"
+  PostResult:
+    type: "object"
+    required:
+    - "description"
+    - "id"
+    - "result"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      result:
+        type: "string"
+        example: "OK"
+      description:
+        type: "string"
+        example: "Description"

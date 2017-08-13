@@ -1,15 +1,18 @@
 'use strict';
 
-exports.addComment = function(args, res, next) {
+exports.getAreaCodeDescription = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * commentBody (CommentBody)
+  * us_code (String)
   **/
     var examples = {};
   examples['application/json'] = [ {
-  "result" : "OK",
-  "description" : "Description",
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+  "country" : "United State",
+  "city" : "Jersey City",
+  "timezone" : "Eastern (UTC-05:00)",
+  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "state" : "New Jersey",
+  "current_time" : "04:48 am"
 } ];
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
@@ -21,18 +24,23 @@ exports.addComment = function(args, res, next) {
   
 }
 
-exports.searchComment = function(args, res, next) {
+exports.getPhoneDescription = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * phoneNumber (String)
+  * phonenumber (String)
   **/
     var examples = {};
   examples['application/json'] = [ {
-  "date" : "2016-08-29T09:12:33.001Z",
-  "ipaddress" : "192.168.1.1",
-  "comment" : "This is a debt collector",
+  "country" : "United State",
+  "carrier" : "VERIZON NEW YORK, INC.",
+  "city" : "Jersey City",
+  "usage_type" : "Landline",
+  "prefix" : "349",
+  "interformat" : "+1 718 349 9300",
+  "county" : "Queens",
   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "username" : "Widget Adapter"
+  "state" : "New Jersey",
+  "areacode" : "718"
 } ];
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');

@@ -8,6 +8,8 @@ var fs = require('fs');
 var serverPort = process.env.PORT || 8000;
 var cors = require('cors');
 
+var mongo = require('mongodb');
+
 app.use(cors());
 
 // swaggerRouter configuration
