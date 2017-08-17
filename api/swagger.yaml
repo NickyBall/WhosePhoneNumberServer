@@ -9,8 +9,8 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "virtserver.swaggerhub.com"
-#basePath: ""
+host: "localhost:8000"
+basePath: "/"
 tags:
 - name: "Comments"
   description: "API about user comment"
@@ -200,6 +200,26 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/PhoneInformation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Information"
+  /GetAllAreaCode:
+    get:
+      tags:
+      - "Information"
+      summary: "Get Description for specific area code"
+      description: "Retrieve List of Area Code\n"
+      operationId: "getAllAreaCode"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Recently Checked PhoneNumber"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AreaCodeList"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Information"
@@ -403,3 +423,15 @@ definitions:
       description:
         type: "string"
         example: "Description"
+  AreaCodeList:
+    type: "object"
+    required:
+    - "code"
+    - "state"
+    properties:
+      code:
+        type: "string"
+        example: "201"
+      state:
+        type: "string"
+        example: "New Jersey"
