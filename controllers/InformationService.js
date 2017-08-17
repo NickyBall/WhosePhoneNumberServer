@@ -18,23 +18,23 @@ exports.getAllAreaCode = function(args, res, next) {
         if (err) {
           res.send(err);
         } else if (result.length) {
-          res.send(result);
+          res.end(JSON.stringify(result));
         }
       });
     }
   });
-    var examples = {};
-  examples['application/json'] = [ {
-  "code" : "201",
-  "state" : "New Jersey"
-} ];
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
+//     var examples = {};
+//   examples['application/json'] = [ {
+//   "code" : "201",
+//   "state" : "New Jersey"
+// } ];
+//   if(Object.keys(examples).length > 0) {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+//   }
+//   else {
+//     res.end();
+//   }
 
 }
 
