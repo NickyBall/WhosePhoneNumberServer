@@ -4,6 +4,25 @@ exports.getAllAreaCode = function(args, res, next) {
   /**
    * parameters expected in the args:
   **/
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      console.log('Unable to Connect Server.');
+    } else {
+      console.log('Connect Establish.');
+      var collection = db.collection('AreaCode');
+      collection.find({}).toArray(function (err, result){
+        if (err) {
+          res.send(err);
+        } else if (result.length) {
+          res.send(result);
+        }
+      });
+    }
+  });
     var examples = {};
   examples['application/json'] = [ {
   "code" : "201",
