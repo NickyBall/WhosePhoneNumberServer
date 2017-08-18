@@ -10,6 +10,10 @@ module.exports.addComment = function addComment (req, res, next) {
   Comments.addComment(req.swagger.params, res, next);
 };
 
+module.exports.postVote = function postVote (req, res, next) {
+  Comments.postVote(req.swagger.params, res, next);
+};
+
 module.exports.searchComment = function searchComment (req, res, next) {
   Comments.searchComment(req.swagger.params, res, next);
 };

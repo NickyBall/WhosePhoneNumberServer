@@ -9,8 +9,8 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8000"
-basePath: "/"
+#host: "localhost:8000"
+#basePath: "/"
 tags:
 - name: "Comments"
   description: "API about user comment"
@@ -63,6 +63,32 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/CommentBody"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PostResult"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
+  /PostVoteForPhoneNumber:
+    post:
+      tags:
+      - "Comments"
+      summary: "Add New Vote"
+      description: "Post Safe Unsafe or Unknown\n"
+      operationId: "postVote"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "VoteBody"
+        description: "Phone Number for Comments"
+        required: true
+        schema:
+          $ref: "#/definitions/VoteBody"
       responses:
         200:
           description: "search results matching criteria"
@@ -395,6 +421,7 @@ definitions:
     required:
     - "CallerTypeId"
     - "Comment"
+    - "PhoneNumber"
     - "Username"
     properties:
       Username:
@@ -406,6 +433,25 @@ definitions:
       CallerTypeId:
         type: "string"
         example: "000001"
+      PhoneNumber:
+        type: "string"
+        example: "201-200-0000"
+  VoteBody:
+    type: "object"
+    required:
+    - "IpAddress"
+    - "PhoneNumber"
+    - "VoteId"
+    properties:
+      VoteId:
+        type: "string"
+        example: "0"
+      IpAddress:
+        type: "string"
+        example: "192.168.1.1"
+      PhoneNumber:
+        type: "string"
+        example: "201-200-0000"
   PostResult:
     type: "object"
     required:
