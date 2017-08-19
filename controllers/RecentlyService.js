@@ -46,14 +46,17 @@ exports.getRecentlyComments = function(args, res, next) {
   mongoClient.connect(url, function(err, db){
     if (err) {
       var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      db.close();
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Comments');
       collection.find({}).sort({_id:-1}).limit(5).toArray( (err, result) => {
         if (err) {
+          db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
+          db.close();
           // var json = { "status" : "OK", "desc" : result };
           res.end(JSON.stringify(result));
         }
@@ -89,15 +92,18 @@ exports.getReportSafe = function(args, res, next) {
 
   mongoClient.connect(url, function(err, db){
     if (err) {
+      db.close();
       var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Votes');
       collection.find({"VoteId":"1"}).sort({_id:-1}).limit(5).toArray( (err, result) => {
         if (err) {
+          db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
+          db.close();
           // var json = { "status" : "OK", "desc" : result };
           res.end(JSON.stringify(result));
         }
@@ -132,15 +138,18 @@ exports.getReportUnSafe = function(args, res, next) {
 
   mongoClient.connect(url, function(err, db){
     if (err) {
+      db.close();
       var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Votes');
       collection.find({"VoteId":"0"}).sort({_id:-1}).limit(5).toArray( (err, result) => {
         if (err) {
+          db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
+          db.close();
           // var json = { "status" : "OK", "desc" : result };
           res.end(JSON.stringify(result));
         }

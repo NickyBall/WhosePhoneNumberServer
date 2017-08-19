@@ -12,14 +12,17 @@ exports.addComment = function(args, res, next) {
   mongoClient.connect(url, function(err, db){
     if (err) {
       var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      db.close();
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Comments');
       collection.insertOne(args.CommentBody.value, function (err, result){
         if (err) {
+          db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
+          db.close();
           var json = { "status" : "OK", "desc" : result };
           res.end(JSON.stringify(json));
         }
@@ -56,15 +59,18 @@ exports.postVote = function(args, res, next) {
   mongoClient.connect(url, function(err, db){
     if (err) {
       var json = { "status":"ERROR", "desc":'Unable to Connect Server.' };
+      db.close();
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Votes');
       collection.insertOne(args.VoteBody.value, function (err, result){
         if (err) {
           var json = { "status":"ERROR", "desc":err };
+          db.close();
           res.end(JSON.stringify(json));
         } else {
           var json = { "status":"OK", "desc":result };
+          db.close();
           res.end(JSON.stringify(json));
         }
       });
