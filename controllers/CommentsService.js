@@ -63,7 +63,7 @@ exports.postVote = function(args, res, next) {
         if (err) {
           var json = { "status":"ERROR", "desc":err };
           res.end(JSON.stringify(json));
-        } else if (result.length) {
+        } else {
           var json = { "status":"OK", "desc":result };
           res.end(JSON.stringify(json));
         }
