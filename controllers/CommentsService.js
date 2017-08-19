@@ -11,33 +11,36 @@ exports.addComment = function(args, res, next) {
 
   mongoClient.connect(url, function(err, db){
     if (err) {
-      console.log('Unable to Connect Server.');
+      var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      res.end(JSON.stringify(json));
     } else {
-      console.log('Connect Establish.');
       var collection = db.collection('Comments');
       collection.insertOne(args.CommentBody.value, function (err, result){
         if (err) {
-          res.send(err);
-        } else if (result.length) {
-          res.end(JSON.stringify(result));
+          var json = { "status" : "ERROR", "desc" : err };
+          res.end(JSON.stringify(json));
+        } else {
+          var json = { "status" : "OK", "desc" : result };
+          res.end(JSON.stringify(json));
         }
       });
     }
+
   });
 
-    var examples = {};
-  examples['application/json'] = [ {
-  "result" : "OK",
-  "description" : "Description",
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-} ];
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
+//     var examples = {};
+//   examples['application/json'] = [ {
+//   "result" : "OK",
+//   "description" : "Description",
+//   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+// } ];
+//   if(Object.keys(examples).length > 0) {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+//   }
+//   else {
+//     res.end();
+//   }
 
 }
 
@@ -52,34 +55,36 @@ exports.postVote = function(args, res, next) {
 
   mongoClient.connect(url, function(err, db){
     if (err) {
-      console.log('Unable to Connect Server.');
+      var json = { "status":"ERROR", "desc":'Unable to Connect Server.' };
+      res.end(JSON.stringify(json));
     } else {
-      console.log('Connect Establish.');
       var collection = db.collection('Votes');
       collection.insertOne(args.VoteBody.value, function (err, result){
         if (err) {
-          res.send(err);
+          var json = { "status":"ERROR", "desc":err };
+          res.end(JSON.stringify(json));
         } else if (result.length) {
-          res.end(JSON.stringify(result));
+          var json = { "status":"OK", "desc":result };
+          res.end(JSON.stringify(json));
         }
       });
     }
   });
   // console.log(args);
-    var examples = {};
-  examples['application/json'] = [ {
-  "result" : "OK",
-  "description" : "Description",
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-} ];
-// examples['application/json'] = [  ];
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
+//     var examples = {};
+//   examples['application/json'] = [ {
+//   "result" : "OK",
+//   "description" : "Description",
+//   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+// } ];
+// // examples['application/json'] = [  ];
+//   if(Object.keys(examples).length > 0) {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+//   }
+//   else {
+//     res.end();
+//   }
 
 }
 
