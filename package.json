@@ -17,6 +17,7 @@
     "cors": "^2.8.4",
     "js-yaml": "^3.3.0",
     "mongodb": "^2.2.31",
+    "request": "^2.81.0",
     "swagger-tools": "0.10.1"
   }
 }
