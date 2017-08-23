@@ -116,3 +116,32 @@ exports.searchComment = function(args, res, next) {
   }
 
 }
+
+exports.getAllCallerType = function(args, res, next) {
+  /**
+   * parameters expected in the args:
+  **/
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      db.close();
+      console.log('Unable to Connect Server.');
+    } else {
+      console.log('Connect Establish.');
+      var collection = db.collection('CallerTypes');
+      collection.find({}).toArray(function (err, result){
+        if (err) {
+          db.close();
+          res.end(err);
+        } else if (result.length) {
+          db.close();
+          res.end(JSON.stringify(result));
+        }
+      });
+    }
+  });
+
+}

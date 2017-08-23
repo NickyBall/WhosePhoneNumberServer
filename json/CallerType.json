@@ -1,0 +1,38 @@
+[
+  {
+    code: "0001",
+    name: "Unknown"
+  },
+  {
+    code: "0002",
+    name: "Debt Collector"
+  },
+  {
+    code: "0003",
+    name: "Non-profit Organization"
+  },
+  {
+    code: "0004",
+    name: "Political Call"
+  },
+  {
+    code: "0005",
+    name: "Prank Call"
+  },
+  {
+    code: "0006",
+    name: "SMS"
+  },
+  {
+    code: "0007",
+    name: "Survey"
+  },
+  {
+    code: "0008",
+    name: "Telemarketer"
+  },
+  {
+    code: "0009",
+    name: "Scam"
+  }
+]

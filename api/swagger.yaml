@@ -47,6 +47,26 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Comments"
+  /GetAllCallerType:
+    get:
+      tags:
+      - "Comments"
+      summary: "Get Caller Type List"
+      description: "Retrieve List of Caller Type\n"
+      operationId: "getAllCallerType"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "List of Caller Type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CallerTypeList"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
   /AddNewComment:
     post:
       tags:
@@ -481,3 +501,15 @@ definitions:
       state:
         type: "string"
         example: "New Jersey"
+  CallerTypeList:
+    type: "object"
+    required:
+    - "code"
+    - "name"
+    properties:
+      code:
+        type: "string"
+        example: "0001"
+      name:
+        type: "string"
+        example: "Unknown"
