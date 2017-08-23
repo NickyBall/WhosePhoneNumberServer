@@ -35,7 +35,7 @@ paths:
       - name: "PhoneNumber"
         in: "query"
         description: "Phone Number for Comments"
-        required: false
+        required: true
         type: "string"
       responses:
         200:
@@ -44,6 +44,31 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CommentItem"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
+  /GetVotesCountByPhoneNumber:
+    get:
+      tags:
+      - "Comments"
+      summary: "Vote Count"
+      description: "Get vote safe and unsafe given phone number\n"
+      operationId: "voteCount"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhoneNumber"
+        in: "query"
+        description: "Phone Number for Vote Count"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Get vote count for safe and unsafe given phonenumber"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/VoteCountItem"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Comments"
@@ -296,6 +321,18 @@ definitions:
       ipaddress:
         type: "string"
         example: "192.168.1.1"
+  VoteCountItem:
+    type: "object"
+    required:
+    - "safe"
+    - "unsafe"
+    properties:
+      safe:
+        type: "string"
+        example: "10"
+      unsafe:
+        type: "string"
+        example: "15"
   RecentlySafeItem:
     type: "object"
     required:

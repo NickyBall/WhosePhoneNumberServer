@@ -21,3 +21,7 @@ module.exports.searchComment = function searchComment (req, res, next) {
 module.exports.getAllCallerType = function getAllCallerType (req, res, next) {
   Comments.getAllCallerType(req.swagger.params, res, next);
 };
+
+module.exports.voteCount = function voteCount (req, res, next) {
+  Comments.voteCount(req.swagger.params, res, next);
+};
