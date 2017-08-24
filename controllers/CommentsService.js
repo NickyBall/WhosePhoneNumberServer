@@ -94,26 +94,37 @@ exports.postVote = function(args, res, next) {
 
 }
 
-exports.searchComment = function(args, res, next) {
+exports.recentReport = function(args, res, next) {
   /**
    * parameters expected in the args:
   * phoneNumber (String)
   **/
-    var examples = {};
-  examples['application/json'] = [ {
-  "date" : "2016-08-29T09:12:33.001Z",
-  "ipaddress" : "192.168.1.1",
-  "comment" : "This is a debt collector",
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "username" : "Widget Adapter"
-} ];
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+
+  var areaCode = args.PhoneNumber.value.substring(0,3);
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      db.close();
+      var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      res.end(JSON.stringify(json));
+    } else {
+      var collection = db.collection('Votes');
+      collection.find({"PhoneNumber": new RegExp('^' + areaCode)}).sort({_id:-1}).limit(10).toArray( (err, result) => {
+        if (err) {
+          db.close();
+          var json = { "status" : "ERROR", "desc" : err };
+          res.end(JSON.stringify(json));
+        } else {
+          db.close();
+          // var json = { "status" : "OK", "desc" : result };
+          res.end(JSON.stringify(result));
+        }
+      });
+    }
+
+  });
 
 }
 
@@ -171,7 +182,7 @@ exports.voteCount = function(args, res, next) {
             }
               safe = result.length;
 
-            
+
             db.close();
             res.end(JSON.stringify({
               safe: safe,

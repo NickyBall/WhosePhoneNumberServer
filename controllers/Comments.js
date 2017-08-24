@@ -14,8 +14,8 @@ module.exports.postVote = function postVote (req, res, next) {
   Comments.postVote(req.swagger.params, res, next);
 };
 
-module.exports.searchComment = function searchComment (req, res, next) {
-  Comments.searchComment(req.swagger.params, res, next);
+module.exports.recentReport = function recentReport (req, res, next) {
+  Comments.recentReport(req.swagger.params, res, next);
 };
 
 module.exports.getAllCallerType = function getAllCallerType (req, res, next) {

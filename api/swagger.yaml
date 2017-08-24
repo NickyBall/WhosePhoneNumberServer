@@ -22,13 +22,13 @@ schemes:
 - "https"
 - "http"
 paths:
-  /GetCommentsByPhoneNumber:
+  /GetRecentReportByPhoneNumber:
     get:
       tags:
       - "Comments"
       summary: "searches Comment"
       description: "Retrieve all comment given phone number\n"
-      operationId: "searchComment"
+      operationId: "recentReport"
       produces:
       - "application/json"
       parameters:
