@@ -14,8 +14,12 @@ module.exports.postVote = function postVote (req, res, next) {
   Comments.postVote(req.swagger.params, res, next);
 };
 
-module.exports.recentReport = function recentReport (req, res, next) {
-  Comments.recentReport(req.swagger.params, res, next);
+module.exports.recentReportByAreaCode = function recentReportByAreaCode (req, res, next) {
+  Comments.recentReportByAreaCode(req.swagger.params, res, next);
+};
+
+module.exports.recentReportByPhoneNumber = function recentReportByPhoneNumber (req, res, next) {
+  Comments.recentReportByPhoneNumber(req.swagger.params, res, next);
 };
 
 module.exports.getAllCallerType = function getAllCallerType (req, res, next) {

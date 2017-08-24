@@ -94,7 +94,7 @@ exports.postVote = function(args, res, next) {
 
 }
 
-exports.recentReport = function(args, res, next) {
+exports.recentReportByAreaCode = function(args, res, next) {
   /**
    * parameters expected in the args:
   * phoneNumber (String)
@@ -103,7 +103,7 @@ exports.recentReport = function(args, res, next) {
   var mongoClient = mongo.MongoClient;
   var url = 'mongodb://localhost:27017/wpn';
 
-  var areaCode = args.PhoneNumber.value.substring(0,3);
+  var areaCode = args.AreaCode.value;
   mongoClient.connect(url, function(err, db){
     if (err) {
       db.close();
@@ -112,6 +112,40 @@ exports.recentReport = function(args, res, next) {
     } else {
       var collection = db.collection('Votes');
       collection.find({"PhoneNumber": new RegExp('^' + areaCode)}).sort({_id:-1}).limit(10).toArray( (err, result) => {
+        if (err) {
+          db.close();
+          var json = { "status" : "ERROR", "desc" : err };
+          res.end(JSON.stringify(json));
+        } else {
+          db.close();
+          // var json = { "status" : "OK", "desc" : result };
+          res.end(JSON.stringify(result));
+        }
+      });
+    }
+
+  });
+
+}
+
+exports.recentReportByPhoneNumber = function(args, res, next) {
+  /**
+   * parameters expected in the args:
+  * phoneNumber (String)
+  **/
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+
+  var PhoneNumber = args.PhoneNumber.value;
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      db.close();
+      var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      res.end(JSON.stringify(json));
+    } else {
+      var collection = db.collection('Votes');
+      collection.find({"PhoneNumber": PhoneNumber}).sort({_id:-1}).limit(10).toArray( (err, result) => {
         if (err) {
           db.close();
           var json = { "status" : "ERROR", "desc" : err };

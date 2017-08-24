@@ -22,13 +22,38 @@ schemes:
 - "https"
 - "http"
 paths:
+  /GetRecentReportByAreaCode:
+    get:
+      tags:
+      - "Comments"
+      summary: "searches Comment"
+      description: "Retrieve all comment given area code\n"
+      operationId: "recentReportByAreaCode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "AreaCode"
+        in: "query"
+        description: "Phone Number for Comments"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CommentItem"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
   /GetRecentReportByPhoneNumber:
     get:
       tags:
       - "Comments"
       summary: "searches Comment"
       description: "Retrieve all comment given phone number\n"
-      operationId: "recentReport"
+      operationId: "recentReportByPhoneNumber"
       produces:
       - "application/json"
       parameters:
