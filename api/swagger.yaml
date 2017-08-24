@@ -249,17 +249,17 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Recently"
-  /GetAreaCodeDescription:
+  /GetStateByAreaCode:
     get:
       tags:
       - "Information"
-      summary: "Get Description for specific area code"
-      description: "Retrieve the Information of Area Code\n"
-      operationId: "getAreaCodeDescription"
+      summary: "Get State for specific area code"
+      description: "Retrieve state of Area Code\n"
+      operationId: "getStateByAreaCode"
       produces:
       - "application/json"
       parameters:
-      - name: "us_code"
+      - name: "AreaCode"
         in: "query"
         description: "US Area Code"
         required: true

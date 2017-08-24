@@ -41,27 +41,33 @@ exports.getAllAreaCode = function(args, res, next) {
 
 }
 
-exports.getAreaCodeDescription = function(args, res, next) {
+exports.getStateByAreaCode = function(args, res, next) {
   /**
    * parameters expected in the args:
   * us_code (String)
   **/
-    var examples = {};
-  examples['application/json'] = [ {
-  "country" : "United State",
-  "city" : "Jersey City",
-  "timezone" : "Eastern (UTC-05:00)",
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "state" : "New Jersey",
-  "current_time" : "04:48 am"
-} ];
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+  console.log(args.AreaCode.value);
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      db.close();
+      console.log('Unable to Connect Server.');
+    } else {
+      console.log('Connect Establish.');
+      var collection = db.collection('AreaCode');
+      collection.findOne({"code":args.AreaCode.value}, function (err, result){
+        if (err) {
+          db.close();
+          res.end(err);
+        } else {
+          db.close();
+          res.end(JSON.stringify(result));
+        }
+      });
+    }
+  });
 
 }
 
