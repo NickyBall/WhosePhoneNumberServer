@@ -94,12 +94,14 @@ exports.getPhoneDescription = function(args, res, next) {
           res.end(JSON.stringify(json));
         } else {
           if (result) {
+            if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+            var collection = db.collection('Checked');
+            collection.insertOne({"PhoneNumber": phonenumber, "location": result.location});
             db.close();
             // var json = { "status" : "OK", "desc" : result };
             res.end(JSON.stringify(result));
           } else {
             var request = require('request');
-
             request('http://apilayer.net/api/validate?access_key='+key+'&number='+phonenumber.replace("-","")
             + '&country_code='+country_code+'&format='+format, (error, response, body) => {
                 // console.log(res);
@@ -112,6 +114,9 @@ exports.getPhoneDescription = function(args, res, next) {
                     var json = { "status" : "ERROR", "desc" : err };
                     res.end(JSON.stringify(json));
                   } else {
+                    if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+                    var collection = db.collection('Checked');
+                    collection.insertOne({"PhoneNumber": phonenumber, "location": resJson.location});
                     db.close();
                     var json = { "status" : "OK", "desc" : result };
                     res.end(JSON.stringify(resJson));
