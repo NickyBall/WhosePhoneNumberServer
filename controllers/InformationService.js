@@ -2,7 +2,7 @@
 
 exports.getAllAreaCode = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   **/
   var mongo = require('mongodb');
   var mongoClient = mongo.MongoClient;
@@ -26,24 +26,24 @@ exports.getAllAreaCode = function(args, res, next) {
       });
     }
   });
-//     var examples = {};
-//   examples['application/json'] = [ {
-//   "code" : "201",
-//   "state" : "New Jersey"
-// } ];
-//   if(Object.keys(examples).length > 0) {
-//     res.setHeader('Content-Type', 'application/json');
-//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-//   }
-//   else {
-//     res.end();
-//   }
+  //     var examples = {};
+  //   examples['application/json'] = [ {
+  //   "code" : "201",
+  //   "state" : "New Jersey"
+  // } ];
+  //   if(Object.keys(examples).length > 0) {
+  //     res.setHeader('Content-Type', 'application/json');
+  //     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+  //   }
+  //   else {
+  //     res.end();
+  //   }
 
 }
 
 exports.getStateByAreaCode = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * us_code (String)
   **/
   var mongo = require('mongodb');
@@ -73,10 +73,17 @@ exports.getStateByAreaCode = function(args, res, next) {
 
 exports.getPhoneDescription = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * phonenumber (String)
   **/
+  console.log(args);
   var phonenumber = args.phonenumber.value;
+  var isLog = false;
+  if (args.log) {
+    if (args.log.value == "true") {
+      isLog = true;
+    }
+  }
   var country_code = 'US';
   var format = '1';
   var key = 'b8181f19a13dab009d378af83f20b019';
@@ -91,25 +98,39 @@ exports.getPhoneDescription = function(args, res, next) {
       db.close();
       res.end(JSON.stringify(json));
     } else {
-      console.log(phonenumber.replace("-",""));
       var collection = db.collection('PhoneInfo');
+      // Find phonenumber
       collection.findOne({"local_format":phonenumber.replace("-","")}, (err, result) => {
         if (err) {
           db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
+          // No error.
           if (result) {
-            if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-            var collection = db.collection('Checked');
-            collection.insertOne({"PhoneNumber": phonenumber, "location": result.location});
+            // Has result => use it.
+
+            // If want to log.
+            if (isLog) {
+              if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3"); // Add dash(-)
+              var collection = db.collection('Checked');
+              collection.insertOne({"PhoneNumber": phonenumber, "location": result.location});
+            }
+
+            // Close connection.
             db.close();
-            // var json = { "status" : "OK", "desc" : result };
+            // hangup from client.
             res.end(JSON.stringify(result));
           } else {
-            var request = require('request');
+            // No result get from Numverify API and store.
+            var request = require('request'); // Library for call rest API with Nodejs.
             request('http://apilayer.net/api/validate?access_key='+key+'&number='+phonenumber.replace("-","")
             + '&country_code='+country_code+'&format='+format, (error, response, body) => {
+              if (error) {
+                db.close();
+                var json = { "status" : "ERROR", "desc" : err };
+                res.end(JSON.stringify(json));
+              } else {
                 var resJson = JSON.parse(body);
 
                 var collection = db.collection('PhoneInfo');
@@ -119,27 +140,24 @@ exports.getPhoneDescription = function(args, res, next) {
                     var json = { "status" : "ERROR", "desc" : err };
                     res.end(JSON.stringify(json));
                   } else {
-                    if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-                    var collection = db.collection('Checked');
-                    collection.insertOne({"PhoneNumber": phonenumber, "location": resJson.location});
+                    // If want to log.
+                    if (isLog) {
+                      if (!phonenumber.includes("-")) phonenumber = phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+                      var collection = db.collection('Checked');
+                      collection.insertOne({"PhoneNumber": phonenumber, "location": resJson.location});
+                    }
+                    // Close connection.
                     db.close();
-                    var json = { "status" : "OK", "desc" : result };
+                    // Hangup from client.
                     res.end(JSON.stringify(resJson));
                   }
                 });
+              }
             });
-              // fetch('http://apilayer.net/api/validate?access_key=b8181f19a13dab009d378af83f20b019&number=4158586273&country_code=US&format=1').then(
-              //   response => response.json()
-              // ).then(response => {
-              //
-              // })
-
           }
-
         }
       });
     }
-
   });
 
 

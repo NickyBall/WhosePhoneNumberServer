@@ -289,6 +289,11 @@ paths:
         description: "Phone Number"
         required: true
         type: "string"
+      - name: "log"
+        in: "query"
+        description: "Indicate logging or not."
+        required: false
+        type: "string"
       responses:
         200:
           description: "Recently Checked PhoneNumber"
