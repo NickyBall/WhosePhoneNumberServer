@@ -15,14 +15,29 @@ exports.getRecentlyCheckedPhoneNumber = function(args, res, next) {
       res.end(JSON.stringify(json));
     } else {
       var collection = db.collection('Checked');
-      collection.find({}).sort({_id:-1}).limit(5).toArray( (err, result) => {
+      collection.aggregate([
+        {
+          $addFields:
+          {
+            AreaCode: { $substr: [ "$PhoneNumber", 0, 3 ] }
+          }
+        },
+        {
+          $lookup:
+          {
+            "from": "AreaCode",
+            "localField": "AreaCode",
+            "foreignField": "code",
+            "as": "AreaCodeJoin"
+          }
+        }
+      ]).sort({_id:-1}).limit(5).toArray( (err, result) => {
         if (err) {
           db.close();
           var json = { "status" : "ERROR", "desc" : err };
           res.end(JSON.stringify(json));
         } else {
           db.close();
-          // var json = { "status" : "OK", "desc" : result };
           res.end(JSON.stringify(result));
         }
       });

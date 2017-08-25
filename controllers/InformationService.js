@@ -110,9 +110,8 @@ exports.getPhoneDescription = function(args, res, next) {
             var request = require('request');
             request('http://apilayer.net/api/validate?access_key='+key+'&number='+phonenumber.replace("-","")
             + '&country_code='+country_code+'&format='+format, (error, response, body) => {
-                // console.log(res);
-                // console.log(body);
                 var resJson = JSON.parse(body);
+
                 var collection = db.collection('PhoneInfo');
                 collection.insertOne(resJson, function (err, result){
                   if (err) {
