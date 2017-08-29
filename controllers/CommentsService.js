@@ -124,7 +124,7 @@ exports.getCommentByPhoneNumber = function(args, res, next) {
         {
           $match : {PhoneNumber: PhoneNumber}
         }
-      ]).sort({_id:-1}).limit(10).toArray( (err, result) => {
+      ]).sort({_id:-1}).limit(5).toArray( (err, result) => {
         if (err) {
           db.close();
           var json = { "status" : "ERROR", "desc" : err };
