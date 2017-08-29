@@ -120,6 +120,9 @@ exports.getCommentByPhoneNumber = function(args, res, next) {
             foreignField: "code",
             as: "CallerType"
           }
+        },
+        {
+          $match : {PhoneNumber: PhoneNumber}
         }
       ]).sort({_id:-1}).limit(10).toArray( (err, result) => {
         if (err) {
