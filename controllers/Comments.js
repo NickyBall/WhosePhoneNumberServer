@@ -29,3 +29,7 @@ module.exports.getAllCallerType = function getAllCallerType (req, res, next) {
 module.exports.voteCount = function voteCount (req, res, next) {
   Comments.voteCount(req.swagger.params, res, next);
 };
+
+module.exports.getCommentByPhoneNumber = function getCommentByPhoneNumber (req, res, next) {
+  Comments.getCommentByPhoneNumber(req.swagger.params, res, next);
+};

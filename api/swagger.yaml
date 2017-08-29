@@ -72,6 +72,31 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Comments"
+  /GetCommentByPhoneNumber:
+    get:
+      tags:
+      - "Comments"
+      summary: "searches Comment"
+      description: "Retrieve all comment given phone number\n"
+      operationId: "getCommentByPhoneNumber"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "PhoneNumber"
+        in: "query"
+        description: "Phone Number for Comments"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CommentItem"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Comments"
   /GetVotesCountByPhoneNumber:
     get:
       tags:

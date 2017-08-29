@@ -2,7 +2,7 @@
 
 exports.addComment = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * commentBody (CommentBody)
   **/
   var mongo = require('mongodb');
@@ -28,28 +28,12 @@ exports.addComment = function(args, res, next) {
         }
       });
     }
-
   });
-
-//     var examples = {};
-//   examples['application/json'] = [ {
-//   "result" : "OK",
-//   "description" : "Description",
-//   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-// } ];
-//   if(Object.keys(examples).length > 0) {
-//     res.setHeader('Content-Type', 'application/json');
-//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-//   }
-//   else {
-//     res.end();
-//   }
-
 }
 
 exports.postVote = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * commentBody (VoteBody)
   **/
   var mongo = require('mongodb');
@@ -76,27 +60,11 @@ exports.postVote = function(args, res, next) {
       });
     }
   });
-  // console.log(args);
-//     var examples = {};
-//   examples['application/json'] = [ {
-//   "result" : "OK",
-//   "description" : "Description",
-//   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-// } ];
-// // examples['application/json'] = [  ];
-//   if(Object.keys(examples).length > 0) {
-//     res.setHeader('Content-Type', 'application/json');
-//     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-//   }
-//   else {
-//     res.end();
-//   }
-
 }
 
 exports.recentReportByAreaCode = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * phoneNumber (String)
   **/
   var mongo = require('mongodb');
@@ -128,9 +96,51 @@ exports.recentReportByAreaCode = function(args, res, next) {
 
 }
 
+exports.getCommentByPhoneNumber = function(args, res, next) {
+
+  var mongo = require('mongodb');
+  var mongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/wpn';
+
+  var PhoneNumber = args.PhoneNumber.value;
+
+  mongoClient.connect(url, function(err, db){
+    if (err) {
+      db.close();
+      var json = { "status" : "ERROR", "desc" : 'Unable to Connect Server.' };
+      res.end(JSON.stringify(json));
+    } else {
+      var collection = db.collection('Comments');
+      collection.aggregate([
+        {
+          $lookup:
+          {
+            from: "CallerTypes",
+            localField: "CallerTypeId",
+            foreignField: "code",
+            as: "CallerType"
+          }
+        }
+      ]).sort({_id:-1}).limit(10).toArray( (err, result) => {
+        if (err) {
+          db.close();
+          var json = { "status" : "ERROR", "desc" : err };
+          res.end(JSON.stringify(json));
+        } else {
+          db.close();
+          // var json = { "status" : "OK", "desc" : result };
+          res.end(JSON.stringify(result));
+        }
+      });
+    }
+
+  });
+
+}
+
 exports.recentReportByPhoneNumber = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   * phoneNumber (String)
   **/
   var mongo = require('mongodb');
@@ -164,7 +174,7 @@ exports.recentReportByPhoneNumber = function(args, res, next) {
 
 exports.getAllCallerType = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   **/
   var mongo = require('mongodb');
   var mongoClient = mongo.MongoClient;
@@ -192,7 +202,7 @@ exports.getAllCallerType = function(args, res, next) {
 
 exports.voteCount = function(args, res, next) {
   /**
-   * parameters expected in the args:
+  * parameters expected in the args:
   **/
   var mongo = require('mongodb');
   var mongoClient = mongo.MongoClient;
@@ -210,19 +220,19 @@ exports.voteCount = function(args, res, next) {
       collection.find({"VoteId":"0", "PhoneNumber":args.PhoneNumber.value}).toArray(function (err, result){
         if (err) {
         }
-          unsafe = result.length;
-          collection.find({"VoteId":"1", "PhoneNumber":args.PhoneNumber.value}).toArray(function (err, result){
-            if (err) {
-            }
-              safe = result.length;
+        unsafe = result.length;
+        collection.find({"VoteId":"1", "PhoneNumber":args.PhoneNumber.value}).toArray(function (err, result){
+          if (err) {
+          }
+          safe = result.length;
 
 
-            db.close();
-            res.end(JSON.stringify({
-              safe: safe,
-              unsafe: unsafe
-            }))
-          });
+          db.close();
+          res.end(JSON.stringify({
+            safe: safe,
+            unsafe: unsafe
+          }))
+        });
 
       });
 
